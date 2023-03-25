@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -48,6 +49,7 @@ public class App extends Application {
                     for (Window window : c.getAddedSubList()) {
                         if (window instanceof Stage stage) {
                             ThemeManager.setTheme(stage.getScene(), ThemeManager.load());
+                            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("icons/app_icon.png")).toExternalForm()));
                         }
                     }
                 }
