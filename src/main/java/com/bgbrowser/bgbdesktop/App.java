@@ -1,7 +1,6 @@
 package com.bgbrowser.bgbdesktop;
 
 import com.bgbrowser.bgbdesktop.utils.ExtensionManager;
-import com.bgbrowser.bgbdesktop.utils.Theme;
 import com.bgbrowser.bgbdesktop.utils.ThemeManager;
 import com.bgbrowser.extensionframework.Browser;
 import javafx.application.Application;
@@ -12,7 +11,6 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Objects;
 
 public class App extends Application {

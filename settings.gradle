@@ -1,3 +1,2 @@
 rootProject.name = "BGBDesktop"
-include ':ExtensionFramework'
-project(':ExtensionFramework').projectDir = new File('ExtensionFramework/lib')
+include ':ExtensionFramework:lib'
