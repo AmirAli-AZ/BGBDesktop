@@ -1,0 +1,89 @@
+* {
+    -fx-bg-color: white;
+    -fx-accent: #2196F3;
+}
+
+#root {
+    -fx-background-color: -fx-bg-color;
+}
+
+.ikonli-font-icon {
+    -fx-icon-color: black;
+}
+
+.list-view {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+}
+
+.list-cell:filled:selected:focused,
+.list-cell:filled:selected {
+    -fx-background-color: -fx-accent;
+}
+
+.list-cell:filled:selected:focused .label,
+.list-cell:filled:selected .label {
+    -fx-text-fill: white;
+}
+
+.list-cell:filled:selected:focused .delete-button .ikonli-font-icon,
+.list-cell:filled:selected .delete-button .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.menu-item {
+    -fx-background-color: -fx-bg-color;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.menu-item:focused {
+    -fx-background-color: -fx-accent;
+}
+
+.menu-item:focused .label {
+    -fx-text-fill: white;
+}
+
+.context-menu {
+    -fx-background-color: -fx-bg-color;
+    -fx-background-radius: 5px;
+}
+
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+    -fx-border-color: lightgray;
+    -fx-border-radius: 5px;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: gray;
+}
+
+.tab-pane .tab-header-area .headers-region .tab {
+    -fx-background-color: -fx-bg-color;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.text-field {
+    -fx-background-color: -fx-bg-color;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+    -fx-border-color: lightgray;
+    -fx-border-radius: 5px;
+    -fx-text-fill: black;
+}
+
+.browser-progress-bar,
+.browser-progress-bar .track {
+    -fx-background-color: transparent;
+}
