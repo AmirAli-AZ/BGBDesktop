@@ -6,6 +6,7 @@ module com.bgbrowser.bgbdesktop {
     requires org.kordamp.ikonli.core;
     requires org.kordamp.ikonli.fontawesome;
     requires com.bgbrowser.extensionframework;
+    requires jdk.crypto.cryptoki;
 
     opens com.bgbrowser.bgbdesktop.ui to javafx.fxml;
     opens com.bgbrowser.bgbdesktop.ui.controllers to javafx.fxml;
