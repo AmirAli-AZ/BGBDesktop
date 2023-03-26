@@ -1,5 +1,7 @@
 package com.bgbrowser.bgbdesktop.ui.controllers;
 
+import com.bgbrowser.bgbdesktop.utils.Theme;
+import com.bgbrowser.bgbdesktop.utils.ThemeManager;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -172,7 +174,19 @@ public class TabController {
             }
         });
 
-        return new ContextMenu(extensionManagerMenuItem);
+        var darkThemeCheckMenuItem = new CheckMenuItem("Dark Theme");
+        darkThemeCheckMenuItem.setSelected(ThemeManager.load() == Theme.DARK);
+        darkThemeCheckMenuItem.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            var theme = newValue ? Theme.DARK : Theme.LIGHT;
+            ThemeManager.applyThemeToAllWindows(theme);
+            try {
+                ThemeManager.save(theme);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        return new ContextMenu(extensionManagerMenuItem, darkThemeCheckMenuItem);
     }
 
     private final EventHandler<ActionEvent> refresh = actionEvent -> {

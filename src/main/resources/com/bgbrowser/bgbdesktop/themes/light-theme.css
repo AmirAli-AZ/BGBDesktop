@@ -91,3 +91,9 @@
 .browser-progress-bar .track {
     -fx-background-color: transparent;
 }
+
+.check-menu-item,
+.radio-menu-item {
+    -fx-focused-mark-color: white;
+}
+
