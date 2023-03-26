@@ -23,13 +23,11 @@ public class AppController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        newTab("Home");
+
         root.setOnKeyPressed(keyEvent -> {
             if (new KeyCodeCombination(KeyCode.T, KeyCombination.CONTROL_DOWN).match(keyEvent)) {
-                var newTab = new Tab("New Tab");
-                var controller = new TabController(newTab);
-                newTab.setContent(controller.getRoot());
-                newTab.setUserData(controller);
-                tabPane.getTabs().add(newTab);
+                newTab("New Tab");
             }
         });
 
@@ -47,6 +45,16 @@ public class AppController implements Initializable {
             });
             thread.start();
         });
+    }
+
+    private void newTab(String text) {
+        var newTab = new Tab(text);
+        var controller = new TabController(newTab);
+        newTab.setContent(controller.getRoot());
+        newTab.setUserData(controller);
+
+        tabPane.getTabs().add(newTab);
+        tabPane.getSelectionModel().select(newTab);
     }
 
 }

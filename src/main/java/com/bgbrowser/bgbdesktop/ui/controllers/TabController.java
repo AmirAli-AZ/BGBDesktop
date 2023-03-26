@@ -3,7 +3,6 @@ package com.bgbrowser.bgbdesktop.ui.controllers;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -37,7 +36,7 @@ public class TabController {
 
     private WebEngine webEngine;
 
-    private final Tab tab;
+    private Tab tab;
 
     public TabController(Tab tab) {
         this.tab = tab;
@@ -46,6 +45,14 @@ public class TabController {
     }
 
     private void initGraphics() {
+        var newTabButton = new Button();
+        newTabButton.setPrefSize(30, 30);
+        newTabButton.setOnAction(newTab);
+        newTabButton.getStyleClass().add("icon-button");
+        var plusIcon = new FontIcon(FontAwesome.PLUS);
+        plusIcon.setIconSize(12);
+        newTabButton.setGraphic(plusIcon);
+
         var backButton = new Button();
         backButton.setPrefSize(30, 30);
         backButton.setOnAction(back);
@@ -86,7 +93,7 @@ public class TabController {
         var contextMenu = createMenu();
         menuButton.setOnMouseClicked(mouseEvent -> contextMenu.show(menuButton, Side.BOTTOM, 0, 0));
 
-        var hbox = new HBox(3, backButton, forwardButton, refreshButton, searchTextField, menuButton);
+        var hbox = new HBox(3, backButton, forwardButton, refreshButton, newTabButton, searchTextField, menuButton);
         hbox.setPadding(new Insets(0, 5, 0, 5));
         hbox.setAlignment(Pos.CENTER);
 
@@ -136,6 +143,20 @@ public class TabController {
         history.go(
                 history.getEntries().size() > 1 && history.getCurrentIndex() < history.getEntries().size() - 1  ? 1 : 0
         );
+    };
+
+    private final EventHandler<ActionEvent> newTab = actionEvent -> {
+        if (tab == null)
+            return;
+
+        var tabPane = tab.getTabPane();
+        var newTab = new Tab("New Tab");
+        var controller = new TabController(newTab);
+        newTab.setContent(controller.getRoot());
+        newTab.setUserData(controller);
+
+        tabPane.getTabs().add(newTab);
+        tabPane.getSelectionModel().select(newTab);
     };
 
     private ContextMenu createMenu() {

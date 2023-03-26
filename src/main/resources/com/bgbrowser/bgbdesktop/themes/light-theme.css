@@ -68,9 +68,13 @@
 }
 
 .tab-pane .tab-header-area .headers-region .tab {
-    -fx-background-color: -fx-bg-color;
+    -fx-background-color: derive(-fx-bg-color, -10%);
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
+}
+
+.tab-pane .tab-header-area .headers-region .tab:selected {
+    -fx-background-color: -fx-bg-color;
 }
 
 .text-field {
