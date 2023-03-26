@@ -38,9 +38,8 @@ public final class ExtensionManager {
     }
 
     public static void loadExtension(Path path, Browser browser) throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        try(var jarFile = new JarFile(path.toFile())){
+        try(var jarFile = new JarFile(path.toFile()); var classLoader = URLClassLoader.newInstance(new URL[]{path.toUri().toURL()})){
             var entries = jarFile.entries();
-            var classLoader = URLClassLoader.newInstance(new URL[]{path.toUri().toURL()});
 
             while (entries.hasMoreElements()) {
                 var entry = entries.nextElement();
