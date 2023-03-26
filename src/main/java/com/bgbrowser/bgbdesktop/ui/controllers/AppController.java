@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.bgbrowser.bgbdesktop.utils.ExtensionManager;
+import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
@@ -44,6 +46,13 @@ public class AppController implements Initializable {
                 }
             });
             thread.start();
+        });
+
+        tabPane.getTabs().addListener((ListChangeListener<? super Tab>) c -> {
+            while (c.next()) {
+                if (c.getList().isEmpty())
+                    Platform.exit();
+            }
         });
     }
 
