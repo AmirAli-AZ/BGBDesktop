@@ -12,7 +12,6 @@ import javafx.geometry.Side;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -117,8 +116,27 @@ public class TabController {
             if (newValue == Worker.State.SUCCEEDED) {
                 searchTextField.setText(webEngine.getLocation());
                 if (tab != null)
-                    tab.textProperty().bind(webEngine.titleProperty());
+                    tab.setText(webEngine.getTitle());
             }
+        });
+
+        webEngine.setConfirmHandler(param -> {
+            var confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, param);
+            var result = confirmAlert.showAndWait();
+            return result.isPresent() && result.get() == ButtonType.OK;
+        });
+
+        webEngine.setOnAlert(event -> {
+            var alert = new Alert(Alert.AlertType.INFORMATION, event.getData());
+            alert.setTitle("Alert");
+            alert.show();
+        });
+
+        webEngine.setPromptHandler(param -> {
+            var textInputDialog = new TextInputDialog(param.getDefaultValue());
+            textInputDialog.setHeaderText(param.getMessage());
+            var result = textInputDialog.showAndWait();
+            return result.orElse(null);
         });
 
         progressBar.progressProperty().bind(webEngine.getLoadWorker().progressProperty());
@@ -126,11 +144,7 @@ public class TabController {
                 progressBar.progressProperty().greaterThan(0).and(progressBar.progressProperty().lessThan(1))
         );
 
-        searchTextField.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ENTER) {
-                webEngine.load(searchTextField.getText());
-            }
-        });
+        searchTextField.setOnAction(actionEvent -> webEngine.load(searchTextField.getText()));
     }
 
     private final EventHandler<ActionEvent> back = actionEvent -> {

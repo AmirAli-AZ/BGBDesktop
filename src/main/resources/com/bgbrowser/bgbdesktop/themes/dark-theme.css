@@ -100,3 +100,19 @@
     -fx-mark-color: white;
     -fx-focused-mark-color: white;
 }
+
+.dialog-pane {
+    -fx-background-color: -fx-bg-color;
+}
+
+.dialog-pane .content {
+    -fx-text-fill: white;
+}
+
+.dialog-pane:header .header-panel {
+    -fx-background-color: -fx-bg-color;
+}
+
+.dialog-pane:header .header-panel .label {
+    -fx-text-fill: white;
+}
