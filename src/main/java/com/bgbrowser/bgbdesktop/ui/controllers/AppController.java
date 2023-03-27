@@ -51,7 +51,7 @@ public class AppController implements Initializable {
         tabPane.getTabs().addListener((ListChangeListener<? super Tab>) c -> {
             while (c.next()) {
                 if (c.getList().isEmpty())
-                    System.exit(0);
+                    Platform.exit();
             }
         });
     }
