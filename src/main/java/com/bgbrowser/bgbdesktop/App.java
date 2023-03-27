@@ -40,6 +40,8 @@ public class App extends Application {
             }
         });
         thread.start();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(ExtensionManager::invokeOnDestroyed));
     }
 
     private void syncIconsAndThemes() {

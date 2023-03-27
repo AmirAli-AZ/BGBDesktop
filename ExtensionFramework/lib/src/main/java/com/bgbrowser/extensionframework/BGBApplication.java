@@ -1,6 +1,8 @@
 package com.bgbrowser.extensionframework;
 
-public abstract class BGBApplication {
+public interface BGBApplication {
 
-    public abstract void initialize(Browser browser);
+    void initialize(Browser browser);
+
+    void onDestroyed();
 }
