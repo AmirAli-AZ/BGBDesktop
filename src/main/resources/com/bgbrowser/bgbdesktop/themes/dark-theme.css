@@ -9,6 +9,7 @@
 
 .ikonli-font-icon {
     -fx-icon-color: white;
+    -fx-icon-size: 12px;
 }
 
 .list-view {

@@ -9,6 +9,7 @@
 
 .ikonli-font-icon {
     -fx-icon-color: black;
+    -fx-icon-size: 12px;
 }
 
 .list-view {
@@ -44,6 +45,10 @@
 
 .menu-item:focused {
     -fx-background-color: -fx-accent;
+}
+
+.custom-menu-item:focused .ikonli-font-icon {
+    -fx-icon-color: white;
 }
 
 .menu-item:focused .label {

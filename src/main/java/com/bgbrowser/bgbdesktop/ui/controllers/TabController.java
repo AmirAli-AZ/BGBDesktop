@@ -12,6 +12,9 @@ import javafx.geometry.Side;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -46,12 +49,13 @@ public class TabController {
     }
 
     private void initGraphics() {
+        root = new VBox();
+
         var newTabButton = new Button();
         newTabButton.setPrefSize(30, 30);
         newTabButton.setOnAction(newTab);
         newTabButton.getStyleClass().add("icon-button");
         var plusIcon = new FontIcon(FontAwesome.PLUS);
-        plusIcon.setIconSize(12);
         newTabButton.setGraphic(plusIcon);
 
         var backButton = new Button();
@@ -59,7 +63,6 @@ public class TabController {
         backButton.setOnAction(back);
         backButton.getStyleClass().add("icon-button");
         var backIcon = new FontIcon(FontAwesome.ARROW_LEFT);
-        backIcon.setIconSize(12);
         backButton.setGraphic(backIcon);
 
         var forwardButton = new Button();
@@ -67,7 +70,6 @@ public class TabController {
         forwardButton.setOnAction(forward);
         forwardButton.getStyleClass().add("icon-button");
         var forwardIcon = new FontIcon(FontAwesome.ARROW_RIGHT);
-        forwardIcon.setIconSize(12);
         forwardButton.setGraphic(forwardIcon);
 
         var refreshButton = new Button();
@@ -75,7 +77,6 @@ public class TabController {
         refreshButton.setOnAction(refresh);
         refreshButton.getStyleClass().add("icon-button");
         var refreshIcon = new FontIcon(FontAwesome.REFRESH);
-        refreshIcon.setIconSize(12);
         refreshButton.setGraphic(refreshIcon);
 
         searchTextField = new TextField();
@@ -88,7 +89,6 @@ public class TabController {
         menuButton.setPrefSize(30, 30);
         menuButton.getStyleClass().add("icon-button");
         var menuIcon = new FontIcon(FontAwesome.BARS);
-        menuIcon.setIconSize(12);
         menuButton.setGraphic(menuIcon);
 
         var contextMenu = createMenu();
@@ -106,7 +106,7 @@ public class TabController {
         webview = new WebView();
         VBox.setVgrow(webview, Priority.ALWAYS);
 
-        root = new VBox(hbox, progressBar, webview);
+        root.getChildren().addAll(hbox, progressBar, webview);
     }
 
     public void init() {
@@ -200,7 +200,51 @@ public class TabController {
             }
         });
 
-        return new ContextMenu(extensionManagerMenuItem, darkThemeCheckMenuItem);
+        var label = new Label("Zoom");
+        label.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(label, Priority.ALWAYS);
+
+        var zoomPercent = new Label("100%");
+
+        var zoomInButton = new Button();
+        zoomInButton.setStyle("-fx-background-color: transparent;");
+        var plusIcon = new FontIcon(FontAwesome.PLUS);
+        zoomInButton.setGraphic(plusIcon);
+        zoomInButton.setOnAction(actionEvent -> {
+            var zoom = zoom(0.10);
+            zoomPercent.setText(zoom);
+        });
+
+        var zoomOutButton = new Button();
+        zoomOutButton.setStyle("-fx-background-color: transparent;");
+        var minusIcon = new FontIcon(FontAwesome.MINUS);
+        zoomOutButton.setGraphic(minusIcon);
+        zoomOutButton.setOnAction(actionEvent -> {
+            var zoom = zoom(-0.10);
+            zoomPercent.setText(zoom);
+        });
+
+        root.setOnKeyPressed(keyEvent -> {
+            if (new KeyCodeCombination(KeyCode.ADD, KeyCombination.CONTROL_DOWN).match(keyEvent)) {
+                var zoom = zoom(0.10);
+                zoomPercent.setText(zoom);
+            }else if (new KeyCodeCombination(KeyCode.SUBTRACT, KeyCombination.CONTROL_DOWN).match(keyEvent)) {
+                var zoom = zoom(-0.10);
+                zoomPercent.setText(zoom);
+            }
+        });
+
+        var customContainer = new HBox(label, zoomInButton, zoomPercent, zoomOutButton);
+        customContainer.setAlignment(Pos.CENTER_LEFT);
+
+        var zoomMenuItem = new CustomMenuItem(customContainer, false);
+
+        return new ContextMenu(extensionManagerMenuItem, darkThemeCheckMenuItem, zoomMenuItem);
+    }
+
+    public String zoom(double zoom) {
+        webview.setZoom(webview.getZoom() + zoom);
+        return ((int) Math.floor(webview.getZoom() * 100)) + "%";
     }
 
     private final EventHandler<ActionEvent> refresh = actionEvent -> {
