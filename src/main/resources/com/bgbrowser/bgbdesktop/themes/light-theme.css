@@ -62,10 +62,19 @@
 
 .icon-button {
     -fx-background-color: transparent;
+    -fx-background-radius: 5px;
     -fx-border-style: solid;
     -fx-border-width: 1px;
     -fx-border-color: lightgray;
     -fx-border-radius: 5px;
+}
+
+.icon-button:hover {
+    -fx-background-color: lightgray;
+}
+
+.icon-button:pressed {
+    -fx-background-color: derive(lightgray, -10%);
 }
 
 .tab-pane .tab-header-area .tab-header-background {
