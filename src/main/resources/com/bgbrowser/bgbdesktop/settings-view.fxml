@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.VBox?>
+
+<SplitPane fx:id="root" dividerPositions="0.2728285077951002" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bgbrowser.bgbdesktop.ui.controllers.SettingsController">
+   <items>
+      <VBox alignment="TOP_CENTER" minWidth="-Infinity" prefWidth="200.0">
+         <children>
+            <ToggleButton fx:id="generalButton" maxWidth="1.7976931348623157E308" minWidth="-Infinity" mnemonicParsing="false" prefWidth="200.0" styleClass="item" text="General">
+               <toggleGroup>
+                  <ToggleGroup fx:id="toggleGroup" />
+               </toggleGroup>
+            </ToggleButton>
+            <ToggleButton fx:id="extensionManagerButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="item" text="ExtensionManager" toggleGroup="$toggleGroup" />
+         </children>
+      </VBox>
+      <VBox fx:id="container" />
+   </items>
+</SplitPane>

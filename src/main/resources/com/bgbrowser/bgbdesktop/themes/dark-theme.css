@@ -67,6 +67,7 @@
     -fx-background-color: -fx-bg-color;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
+    -fx-padding: 3 15 3 15;
 }
 
 .tab-pane .tab-header-area .headers-region .tab:selected {
@@ -125,4 +126,62 @@
 
 .dialog-pane:header .header-panel .label {
     -fx-text-fill: white;
+}
+
+.item {
+    -fx-background-color: -fx-bg-color;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 8px;
+}
+
+.item:hover,
+.item:selected {
+    -fx-background-color: -fx-accent;
+}
+
+.split-pane .split-pane-divider {
+    -fx-background-color: #2B2B2B;
+}
+
+.scroll-pane,
+.scroll-pane > .viewport,
+.scroll-pane .corner {
+    -fx-background-color: -fx-bg-color;
+}
+
+.scroll-bar,
+.scroll-bar .track-background,
+.scroll-bar .track,
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: -fx-bg-color;
+}
+
+.scroll-bar .increment-button .increment-arrow,
+.scroll-bar .decrement-button .decrement-arrow {
+    -fx-background-color: white;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #313335;
+    -fx-background-radius: 3px;
+}
+
+.radio-button .text {
+    -fx-fill: white;
+}
+
+.radio-button .radio {
+    -fx-background-color: -fx-bg-color;
+    -fx-background-radius: 360;
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+    -fx-border-color: gray;
+    -fx-border-radius: 360;
+}
+
+.radio-button:selected .radio .dot {
+    -fx-background-color: white;
 }

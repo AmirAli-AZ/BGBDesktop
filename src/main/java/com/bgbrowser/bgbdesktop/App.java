@@ -1,7 +1,7 @@
 package com.bgbrowser.bgbdesktop;
 
 import com.bgbrowser.bgbdesktop.utils.ExtensionManager;
-import com.bgbrowser.bgbdesktop.utils.ThemeManager;
+import com.bgbrowser.bgbdesktop.utils.ConfigManager;
 import com.bgbrowser.extensionframework.Browser;
 import javafx.application.Application;
 import javafx.collections.ListChangeListener;
@@ -23,9 +23,9 @@ public class App extends Application {
         primaryStage.setTitle("BGB");
         var scene = new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("app-view.fxml"))));
 
-        var loadedTheme = ThemeManager.load();
-        ThemeManager.setTheme(scene, loadedTheme);
-        ThemeManager.save(loadedTheme);
+        var loadedTheme = ConfigManager.load();
+        ConfigManager.setTheme(scene, loadedTheme);
+        ConfigManager.save(loadedTheme);
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -50,7 +50,7 @@ public class App extends Application {
                 if (c.wasAdded()) {
                     for (Window window : c.getAddedSubList()) {
                         if (window instanceof Stage stage) {
-                            ThemeManager.setTheme(stage.getScene(), ThemeManager.load());
+                            ConfigManager.setTheme(stage.getScene(), ConfigManager.load());
                             stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("icons/app_icon.png")).toExternalForm()));
                         }
                     }

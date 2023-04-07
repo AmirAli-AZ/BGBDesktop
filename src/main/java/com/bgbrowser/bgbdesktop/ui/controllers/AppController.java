@@ -36,16 +36,19 @@ public class AppController implements Initializable {
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null)
                 return;
-            var thread = new Thread(() -> {
-                var controller = ((TabController) newValue.getUserData());
-                try {
-                    ExtensionManager.setCurrentTab(newValue);
-                    ExtensionManager.setCurrentWebview(controller.getWebview());
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-            thread.start();
+
+            if (newValue.getUserData() != null && !(newValue.getUserData() instanceof TabController)) {
+                var thread = new Thread(() -> {
+                    var controller = ((TabController) newValue.getUserData());
+                    try {
+                        ExtensionManager.setCurrentTab(newValue);
+                        ExtensionManager.setCurrentWebview(controller.getWebview());
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+                thread.start();
+            }
         });
 
         tabPane.getTabs().addListener((ListChangeListener<? super Tab>) c -> {
@@ -59,7 +62,6 @@ public class AppController implements Initializable {
     private void newTab(String text) {
         var newTab = new Tab(text);
         var controller = new TabController(newTab);
-        newTab.setContent(controller.getRoot());
         newTab.setUserData(controller);
 
         tabPane.getTabs().add(newTab);

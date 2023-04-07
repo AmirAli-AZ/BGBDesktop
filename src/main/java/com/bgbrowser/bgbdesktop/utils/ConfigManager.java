@@ -8,13 +8,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Properties;
 
-public final class ThemeManager {
+public final class ConfigManager {
 
 
     public static void setTheme(Scene scene, Theme theme) {
@@ -52,29 +53,31 @@ public final class ThemeManager {
 
     public static void save(Theme theme) throws IOException {
         var properties = new Properties();
+        if (isConfigFileExists()) {
+            var fis = new FileInputStream(getConfigFile().toFile());
+            properties.load(fis);
+            fis.close();
+        }
         properties.setProperty("theme", theme.getName());
-        var fos = new FileOutputStream(getThemeConfigFile().toFile());
+        var fos = new FileOutputStream(getConfigFile().toFile());
         properties.store(fos, "DO NOT EDIT");
         fos.close();
     }
 
 
-    public static Path getThemeConfigFile() {
-        return Paths.get(Environment.getAppDataPath() + File.separator + "theme-config.properties");
+    public static Path getConfigFile() {
+        return Paths.get(Environment.getAppDataPath() + File.separator + "config.properties");
     }
 
-    public static boolean isThemeConfigFileExists() {
-        return Files.exists(getThemeConfigFile());
+    public static boolean isConfigFileExists() {
+        return Files.exists(getConfigFile());
     }
 
     public static String getProperty(String key) throws IOException {
         Objects.requireNonNull(key);
 
-        if (!isThemeConfigFileExists())
-            return null;
-
         var properties = new Properties();
-        var fis = new FileInputStream(getThemeConfigFile().toFile());
+        var fis = new FileInputStream(getConfigFile().toFile());
         properties.load(fis);
         fis.close();
 
@@ -84,5 +87,19 @@ public final class ThemeManager {
     public static String getProperty(String key, String defaultValue) throws IOException {
         var value = getProperty(key);
         return value == null ? defaultValue : value;
+    }
+
+    public static void saveSearchEngine(URL url, String searchEngineName) throws IOException {
+        var properties = new Properties();
+        if (isConfigFileExists()) {
+            var fis = new FileInputStream(getConfigFile().toFile());
+            properties.load(fis);
+            fis.close();
+        }
+        properties.setProperty("searchEngine", url.toString());
+        properties.setProperty("searchEngineName", searchEngineName);
+        var fos = new FileOutputStream(getConfigFile().toFile());
+        properties.store(fos, "DO NOT EDIT");
+        fos.close();
     }
 }

@@ -1,7 +1,7 @@
 package com.bgbrowser.bgbdesktop.ui.controllers;
 
 import com.bgbrowser.bgbdesktop.utils.Theme;
-import com.bgbrowser.bgbdesktop.utils.ThemeManager;
+import com.bgbrowser.bgbdesktop.utils.ConfigManager;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,6 +26,8 @@ import org.kordamp.ikonli.fontawesome.FontAwesome;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Objects;
 
 public class TabController {
@@ -46,6 +48,7 @@ public class TabController {
         this.tab = tab;
         initGraphics();
         init();
+        this.tab.setContent(root);
     }
 
     private void initGraphics() {
@@ -80,7 +83,7 @@ public class TabController {
         refreshButton.setGraphic(refreshIcon);
 
         searchTextField = new TextField();
-        searchTextField.setPromptText("URL");
+        searchTextField.setPromptText("Search or type url");
         searchTextField.setFont(Font.font(14));
         HBox.setHgrow(searchTextField, Priority.ALWAYS);
         HBox.setMargin(searchTextField, new Insets(5));
@@ -144,7 +147,23 @@ public class TabController {
                 progressBar.progressProperty().greaterThan(0).and(progressBar.progressProperty().lessThan(1))
         );
 
-        searchTextField.setOnAction(actionEvent -> webEngine.load(searchTextField.getText()));
+        searchTextField.setOnAction(actionEvent -> {
+            if (isValidURL(searchTextField.getText())) {
+                webEngine.load(searchTextField.getText());
+            }else {
+                try {
+                    var searchEngine = ConfigManager.getProperty("searchEngine");
+                    if (searchEngine == null || searchEngine.isEmpty()) {
+                        searchEngine = "https://www.google.com/search?q=";
+                        ConfigManager.saveSearchEngine(new URL(searchEngine), "Google");
+                    }
+                    webEngine.load(searchEngine + searchTextField.getText());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
     }
 
     private final EventHandler<ActionEvent> back = actionEvent -> {
@@ -168,7 +187,6 @@ public class TabController {
         var tabPane = tab.getTabPane();
         var newTab = new Tab("New Tab");
         var controller = new TabController(newTab);
-        newTab.setContent(controller.getRoot());
         newTab.setUserData(controller);
 
         tabPane.getTabs().add(newTab);
@@ -189,12 +207,12 @@ public class TabController {
         });
 
         var darkThemeCheckMenuItem = new CheckMenuItem("Dark Theme");
-        darkThemeCheckMenuItem.setSelected(ThemeManager.load() == Theme.DARK);
+        darkThemeCheckMenuItem.setSelected(ConfigManager.load() == Theme.DARK);
         darkThemeCheckMenuItem.selectedProperty().addListener((observable, oldValue, newValue) -> {
             var theme = newValue ? Theme.DARK : Theme.LIGHT;
-            ThemeManager.applyThemeToAllWindows(theme);
+            ConfigManager.applyThemeToAllWindows(theme);
             try {
-                ThemeManager.save(theme);
+                ConfigManager.save(theme);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -239,7 +257,27 @@ public class TabController {
 
         var zoomMenuItem = new CustomMenuItem(customContainer, false);
 
-        return new ContextMenu(extensionManagerMenuItem, darkThemeCheckMenuItem, zoomMenuItem);
+        var settingsMenuItem = new MenuItem("Settings");
+        settingsMenuItem.setOnAction(actionEvent -> {
+            if (tab == null)
+                return;
+
+            var tabPane = tab.getTabPane();
+            var settingsTab = new Tab("Settings");
+            var loader = new FXMLLoader(getClass().getResource("/com/bgbrowser/bgbdesktop/settings-view.fxml"));
+            try {
+                settingsTab.setContent(loader.load());
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            tabPane.getTabs().add(settingsTab);
+            tabPane.getSelectionModel().select(settingsTab);
+        });
+
+        return new ContextMenu(
+                extensionManagerMenuItem, darkThemeCheckMenuItem, zoomMenuItem, settingsMenuItem
+        );
     }
 
     public String zoom(double zoom) {
@@ -250,6 +288,15 @@ public class TabController {
     private final EventHandler<ActionEvent> refresh = actionEvent -> {
         webEngine.reload();
     };
+
+    private boolean isValidURL(String url) {
+        try {
+            new URL(url);
+        }catch (MalformedURLException e) {
+            return false;
+        }
+        return true;
+    }
 
     public Parent getRoot() {
         return root;
